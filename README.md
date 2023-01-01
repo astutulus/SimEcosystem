@@ -1,4 +1,4 @@
 # SimEcosystem
-GUI to visualise multithreading activity
+## GUI to visualise multithreading activity
 
-Intended as a fun way to learn various programming techniques, rather than an accurate demonstration of animal behviour
+Personal project intended as a fun way for me to practise some techniques, rather than being an accurate demonstration of animal behviour!
