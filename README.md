@@ -1,4 +1,4 @@
-# SimEcosystem
+# Simulated Ecosystem
 ## GUI to visualise multithreading activity
 
-Personal project intended as a fun way for me to practise some techniques, rather than being an accurate demonstration of animal behviour!
+Fun personal project intended to practise some C# techniques, rather than being a particularly accurate model of animal behviour!
