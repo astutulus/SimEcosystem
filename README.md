@@ -6,19 +6,19 @@ Fun personal project intended to practise some C# techniques, rather than being 
 ### EcosystemClassLibrary
 
 Class inheritance:
+`
+abstract                 concrete
 
-' abstract                 concrete '
-'                                   '
-' Entity                            '
-'  |_ LivingThing                   '
-'      |_ Plant                     '
-'      |   |______________ Grass    '
-'      |_ Animal                    '
-'          |_ Herbivore             '
-'          |   |__________ Rabbit   '
-'          |_ Carnivore             '
-'              |__________ Fox      '
-
+Entity
+ |_ LivingThing
+     |_ Plant
+     |   |______________ Grass
+     |_ Animal
+         |_ Herbivore
+         |   |__________ Rabbit
+         |_ Carnivore
+             |__________ Fox
+`
 ### SimEco
 
 Windows Form GUI
