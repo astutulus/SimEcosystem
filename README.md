@@ -4,7 +4,7 @@ A fun personal project intended to practise some C# techniques, rather than bein
 
 ## Project 1: EcosystemClassLibrary
 
-Inheritance heirarchy. Leaf classes are concrete; ancestors are all abstract.
+Inheritance heirarchy. All superclasses are abstract.
 
     Entity
       ├─── Terrain
@@ -24,11 +24,11 @@ Inheritance heirarchy. Leaf classes are concrete; ancestors are all abstract.
 - Every Animal looks for it's required Food.
 - etc.
 
-## Project 2: SimEco (references the project above)
+## Project 2: SimEco
 
-Entry point.
+Entry point. References the project above.
 
-Windows Form GUI that currently allows placement of Grass, Rabbit and Fox on a blank field.
+Windows Form that allows the user to place Grass, Rabbits and Foxes on a blank field.
 
 Entities are represented by coloured circles. The goal is not currently to master computer graphics.
 
