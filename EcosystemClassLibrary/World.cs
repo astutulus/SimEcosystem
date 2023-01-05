@@ -84,6 +84,16 @@ public class World
         return results;
     }
 
+    /*
+     * Shortcut alias for GetNearestEntityToPointFromSet()
+     * 
+     * More idiomatic when interrogating whole world.
+     * Animals can't do that, but "God" functions of the GUI can.
+     */
+    public static Entity GetNearestEntityToPointFromWorld(Point centre, World world)
+    {
+        return GetNearestEntityToPointFromSet(centre, world.Entities);
+    }
 
     /// <summary>
     /// Given a set of Entities, return the Entity closest to a specified Point.
@@ -96,6 +106,8 @@ public class World
     /// <exception cref="Exception"></exception>
     public static Entity GetNearestEntityToPointFromSet(Point centre, HashSet<Entity> set)
     {
+        if (set.Count == 0) return null;
+
         Entity nearest;
         try
         {

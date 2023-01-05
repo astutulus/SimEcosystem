@@ -1,4 +1,5 @@
 ﻿using EcosystemClassLibrary;
+using System.Text;
 
 namespace SimEco;
 
@@ -7,14 +8,28 @@ public partial class GUIForm : Form
     private bool running = true;
     private ESpecies drawToolSelected = ESpecies.grass;
 
-    private readonly World world;
+    private readonly World myWorld;
     private readonly Rectangle drawingRect;
 
     public GUIForm()
     {
         InitializeComponent();
 
-        #region Pre-computation
+        GetTypicalWorld(ref myWorld, ref drawingRect);
+
+        drawToolSelected = ESpecies.rabbit;
+        PrintInstruction();
+
+        foxTxt.Text = "";
+        rabbitTxt.Text = "";
+        grassTxt.Text = "";
+
+        Thread refresh = new(RefreshScreen);
+        refresh.Start();
+    }
+
+    private void GetTypicalWorld(ref World myWorld, ref Rectangle drawingRect)
+    {
         // Pre-compute working area where user may click
         drawingRect = panel.ClientRectangle;
         drawingRect.Offset(panel.Location);
@@ -25,23 +40,8 @@ public partial class GUIForm : Form
         drawingRect.X += 20;
         drawingRect.Y += 20;
 
-
-        world = new("Robinland", drawingRect, Constants.kSpriteDia);
-
-
-        #endregion
-
-        drawToolSelected = ESpecies.rabbit;
-        PrintInstruction("herbivore");
-
-        foxTxt.Text = "";
-        rabbitTxt.Text = "";
-        grassTxt.Text = "";
-
-        Thread refresh = new(RefreshScreen);
-        refresh.Start();
+        myWorld = new("Robinland", drawingRect, Constants.kSpriteDia);
     }
-
 
     /*
      * Main "game loop"
@@ -56,12 +56,30 @@ public partial class GUIForm : Form
                 Invalidate();
             }
             // Every tenth cycle check the following
+            CheckMouseOnMap();
 
             // Text labels by tools
             // foxTxt.Text = LivingThing.GetSpeciesCount(ESpecies.fox).ToString();
         }
     }
 
+    protected void CheckMouseOnMap()
+    {
+        Point mousePos = MousePosition;
+
+        if (drawingRect.Contains(mousePos))
+        {
+            Entity nearest = World.GetNearestEntityToPointFromWorld(mousePos, myWorld);
+            if (nearest != null)
+            {
+                PrintInfo(nearest);
+            }
+        }
+        else
+        {
+            PrintInstruction();
+        }
+    }
 
     protected override void OnMouseDown(MouseEventArgs @event)
     {
@@ -72,13 +90,13 @@ public partial class GUIForm : Form
                 switch (drawToolSelected)
                 {
                     case ESpecies.fox:
-                        new Fox(world, @event.Location);
+                        new Fox(myWorld, @event.Location);
                         break;
                     case ESpecies.rabbit:
-                        new Rabbit(world, @event.Location);
+                        new Rabbit(myWorld, @event.Location);
                         break;
                     case ESpecies.grass:
-                        new Grass(world, @event.Location);
+                        new Grass(myWorld, @event.Location);
                         break;
                     default:
                         ClearDescription();
@@ -95,7 +113,7 @@ public partial class GUIForm : Form
         PaintEntities(e);
         PaintDrawToolBox(e);
 
-        labelCount.Text = world.Entities.Count.ToString();
+        labelCount.Text = myWorld.Entities.Count.ToString();
 
         base.OnPaint(e);
     }
@@ -115,7 +133,7 @@ public partial class GUIForm : Form
 
     private void PaintEntities(PaintEventArgs e)
     {
-        foreach (Entity item in world.Entities)
+        foreach (Entity item in myWorld.Entities)
         {
             if (item is LivingThing)
             {
@@ -123,7 +141,7 @@ public partial class GUIForm : Form
 
                 Point pt = new Point(item.Position.X - (dia / 2), item.Position.Y - (dia / 2));
                 Size sz = new Size(dia, dia);
-                Rectangle bounds = new (pt, sz);
+                Rectangle bounds = new(pt, sz);
 
                 LivingThing lt = item as LivingThing;
                 switch (lt.Species)
@@ -183,34 +201,56 @@ public partial class GUIForm : Form
     private void ButtonStop_Click(object sender, EventArgs e)
     {
         running = false;
-        world.Entities.Clear();
+        myWorld.Entities.Clear();
         running = true;
     }
 
     private void pictureBox1_Click(object sender, EventArgs e)
     {
         drawToolSelected = ESpecies.fox;
-        PrintInstruction("carnivore");
+        PrintInstruction();
     }
 
     private void pictureBox2_Click(object sender, EventArgs e)
     {
         drawToolSelected = ESpecies.rabbit;
-        PrintInstruction("herbivore");
+        PrintInstruction();
     }
 
     private void pictureBox3_Click(object sender, EventArgs e)
     {
         drawToolSelected = ESpecies.grass;
-        PrintInstruction("vegetation");
+        PrintInstruction();
     }
 
-    private void PrintInstruction(string text)
+    private void PrintInstruction()
     {
-        labelDescription.Text = string.Format("Click map to place {0},\nor click a different life form", text.ToUpper());
+        string placing = drawToolSelected.ToString().ToUpper();
+        StringBuilder instruction = new StringBuilder();
+        instruction.Append(string.Format("Click map to place {0}", placing));
+        instruction.Append("\nor click a different life form");
+        SafelySetLabelDescription(instruction.ToString());
     }
+
+    private void PrintInfo(Entity ent)
+    {
+        string? text = ent.ToString();
+        if (text != null)
+        {
+            SafelySetLabelDescription(text);
+        }
+    }
+
     private void ClearDescription()
     {
-        labelDescription.Text = "";
+        SafelySetLabelDescription("");
+    }
+
+    private void SafelySetLabelDescription(string text)
+    {
+        if (labelDescription.InvokeRequired)
+        {
+            labelDescription.BeginInvoke(delegate { labelDescription.Text = text; });
+        }
     }
 }
