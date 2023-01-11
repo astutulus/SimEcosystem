@@ -33,3 +33,7 @@ Windows Form that allows the user to place Grass, Rabbits and Foxes on a blank f
 Entities are represented by coloured circles. The goal is not currently to master computer graphics.
 
 The afforementioned Entities act independently, and I have only just begun to implement their behaviour.
+
+## To do
+
+Solve offset that is making cursor feel faulty.

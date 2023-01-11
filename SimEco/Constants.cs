@@ -39,4 +39,11 @@ internal class Constants
      */
     internal static readonly Color kToolStrokeColour = Color.IndianRed;
     internal static readonly int kToolStrokeWidth = 12;
+
+    /*
+     * Highlight
+     */
+    internal const int kHighlightSize = 56;
+    internal static readonly Color kHighlightStrokeColour = Color.RebeccaPurple;
+    internal static readonly int kHighlightStrokeWidth = 2;
 }

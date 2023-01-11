@@ -5,11 +5,14 @@ namespace SimEco;
 
 public partial class GUIForm : Form
 {
-    private bool running = true;
-    private ESpecies drawToolSelected = ESpecies.grass;
+    private bool _running = true;
+    private Boolean _isEntityHighlighted = false;
+    private Entity? _nearestToCursor = null;
+    private ESpecies _drawToolSelected = ESpecies.grass;
 
     private readonly World myWorld;
     private readonly Rectangle drawingRect;
+
 
     public GUIForm()
     {
@@ -17,7 +20,7 @@ public partial class GUIForm : Form
 
         GetTypicalWorld(ref myWorld, ref drawingRect);
 
-        drawToolSelected = ESpecies.rabbit;
+        _drawToolSelected = ESpecies.rabbit;
         PrintInstruction();
 
         foxTxt.Text = "";
@@ -48,15 +51,15 @@ public partial class GUIForm : Form
      */
     void RefreshScreen()
     {
-        while (running)
+        while (_running)
         {
             for (int i = 0; i < 10; i++)
             {
                 Thread.Sleep(Constants.kRefreshDelayMs);
+                CheckMouseOnMap();
                 Invalidate();
             }
             // Every tenth cycle check the following
-            CheckMouseOnMap();
 
             // Text labels by tools
             // foxTxt.Text = LivingThing.GetSpeciesCount(ESpecies.fox).ToString();
@@ -69,16 +72,16 @@ public partial class GUIForm : Form
 
         if (drawingRect.Contains(mousePos))
         {
-            Entity nearest = World.GetNearestEntityToPointFromWorld(mousePos, myWorld);
-            if (nearest != null)
+            if (myWorld.Entities.Count > 0)
             {
-                PrintInfo(nearest);
+                _isEntityHighlighted = true;
+                _nearestToCursor = World.GetNearestEntityToPointFromWorld(mousePos, myWorld);
+                PrintInfo(_nearestToCursor);
+                return;
             }
         }
-        else
-        {
-            PrintInstruction();
-        }
+        PrintInstruction();
+        _isEntityHighlighted = false;
     }
 
     protected override void OnMouseDown(MouseEventArgs @event)
@@ -87,7 +90,7 @@ public partial class GUIForm : Form
         {
             if (drawingRect.Contains(@event.Location))
             {
-                switch (drawToolSelected)
+                switch (_drawToolSelected)
                 {
                     case ESpecies.fox:
                         new Fox(myWorld, @event.Location);
@@ -112,6 +115,7 @@ public partial class GUIForm : Form
         PaintTerrain(e);
         PaintEntities(e);
         PaintDrawToolBox(e);
+        PaintEntityHighlight(e);
 
         labelCount.Text = myWorld.Entities.Count.ToString();
 
@@ -180,7 +184,7 @@ public partial class GUIForm : Form
     private void PaintDrawToolBox(PaintEventArgs e)
     {
         PictureBox target = null;
-        switch (drawToolSelected)
+        switch (_drawToolSelected)
         {
             case ESpecies.fox:
                 target = pictureBox1;
@@ -198,34 +202,51 @@ public partial class GUIForm : Form
         e.Graphics.DrawRectangle(stroke, rect);
     }
 
+    private void PaintEntityHighlight(PaintEventArgs e)
+    {
+        if (_isEntityHighlighted)
+        {
+            Point location = _nearestToCursor.Position;
+            location.X -= Constants.kHighlightSize / 2;
+            location.Y -= Constants.kHighlightSize / 2;
+
+            Size size = new(Constants.kHighlightSize, Constants.kHighlightSize);
+
+            Rectangle highlight = new(location, size);
+
+            using var stroke = new Pen(Constants.kHighlightStrokeColour, Constants.kHighlightStrokeWidth);
+            e.Graphics.DrawRectangle(stroke, highlight);
+        }
+    }
+
     private void ButtonStop_Click(object sender, EventArgs e)
     {
-        running = false;
+        _running = false;
         myWorld.Entities.Clear();
-        running = true;
+        _running = true;
     }
 
     private void pictureBox1_Click(object sender, EventArgs e)
     {
-        drawToolSelected = ESpecies.fox;
+        _drawToolSelected = ESpecies.fox;
         PrintInstruction();
     }
 
     private void pictureBox2_Click(object sender, EventArgs e)
     {
-        drawToolSelected = ESpecies.rabbit;
+        _drawToolSelected = ESpecies.rabbit;
         PrintInstruction();
     }
 
     private void pictureBox3_Click(object sender, EventArgs e)
     {
-        drawToolSelected = ESpecies.grass;
+        _drawToolSelected = ESpecies.grass;
         PrintInstruction();
     }
 
     private void PrintInstruction()
     {
-        string placing = drawToolSelected.ToString().ToUpper();
+        string placing = _drawToolSelected.ToString().ToUpper();
         StringBuilder instruction = new StringBuilder();
         instruction.Append(string.Format("Click map to place {0}", placing));
         instruction.Append("\nor click a different life form");
