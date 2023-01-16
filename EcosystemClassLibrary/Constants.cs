@@ -10,9 +10,10 @@ internal class Constants
 
     /*
      * Distance travelled (pixels)
+     * Used to be called "speed" and this is what it [inversely] affects
      */
-    internal static double kStepSizeFox = 4.0d;
-    internal static double kStepSizeRabbit = 1.8d;
+    internal static double kStepSizeFox = 1.8d;
+    internal static double kStepSizeRabbit = 3.2d;
 
 
     /*
@@ -71,4 +72,5 @@ internal class Constants
      * Energy (Percent) - Not yet clear how used
      */
     internal static double kStartEnergyPercent = 100.0;
+
 }

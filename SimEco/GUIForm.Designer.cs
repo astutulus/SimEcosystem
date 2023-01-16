@@ -47,7 +47,7 @@
             // 
             this.panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel.Location = new System.Drawing.Point(168, 76);
+            this.panel.Location = new System.Drawing.Point(170, 75);
             this.panel.Margin = new System.Windows.Forms.Padding(0);
             this.panel.Name = "panel";
             this.panel.Size = new System.Drawing.Size(400, 400);
@@ -155,7 +155,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 488);
+            this.ClientSize = new System.Drawing.Size(584, 488);
             this.Controls.Add(this.foxTxt);
             this.Controls.Add(this.grassTxt);
             this.Controls.Add(this.rabbitTxt);

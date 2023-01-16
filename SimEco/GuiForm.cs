@@ -6,44 +6,42 @@ namespace SimEco;
 public partial class GUIForm : Form
 {
     private bool _running = true;
-    private Boolean _isEntityHighlighted = false;
-    private Entity? _nearestToCursor = null;
-    private ESpecies _drawToolSelected = ESpecies.grass;
+    private Boolean _isNearestHighlighted = false;
+    private Entity? _nearestEntity = null;
+    private ESpecies _toolSelected = ESpecies.grass;
 
+    private readonly Rectangle worldEdge;
     private readonly World myWorld;
-    private readonly Rectangle drawingRect;
+
+    Point mapOffset;
+    Point mapNegOffset;
 
 
     public GUIForm()
     {
         InitializeComponent();
 
-        GetTypicalWorld(ref myWorld, ref drawingRect);
+        worldEdge = panel.ClientRectangle;
+        worldEdge.Width -= Constants.kSpriteDia;
+        worldEdge.Height -= Constants.kSpriteDia;
+        worldEdge.Offset(Constants.kSpriteDia / 2, Constants.kSpriteDia / 2);
 
-        _drawToolSelected = ESpecies.rabbit;
-        PrintInstruction();
+        myWorld = new("Robinland", worldEdge, Constants.kSpriteDia);
 
+        mapOffset = panel.Location;
+        mapNegOffset = mapOffset;
+        mapNegOffset.X *= -1;
+        mapNegOffset.Y *= -1;
+
+        _toolSelected = ESpecies.rabbit;
         foxTxt.Text = "";
         rabbitTxt.Text = "";
         grassTxt.Text = "";
 
+        PrintInstruction();
+
         Thread refresh = new(RefreshScreen);
         refresh.Start();
-    }
-
-    private void GetTypicalWorld(ref World myWorld, ref Rectangle drawingRect)
-    {
-        // Pre-compute working area where user may click
-        drawingRect = panel.ClientRectangle;
-        drawingRect.Offset(panel.Location);
-
-        drawingRect.Width -= 40;
-        drawingRect.Height -= 40;
-
-        drawingRect.X += 20;
-        drawingRect.Y += 20;
-
-        myWorld = new("Robinland", drawingRect, Constants.kSpriteDia);
     }
 
     /*
@@ -56,7 +54,6 @@ public partial class GUIForm : Form
             for (int i = 0; i < 10; i++)
             {
                 Thread.Sleep(Constants.kRefreshDelayMs);
-                CheckMouseOnMap();
                 Invalidate();
             }
             // Every tenth cycle check the following
@@ -66,40 +63,44 @@ public partial class GUIForm : Form
         }
     }
 
-    protected void CheckMouseOnMap()
+    protected override void OnMouseMove(MouseEventArgs @event)
     {
-        Point mousePos = MousePosition;
+        var mousePos = panel.PointToClient(Cursor.Position);
 
-        if (drawingRect.Contains(mousePos))
+        if (worldEdge.Contains(mousePos))
         {
             if (myWorld.Entities.Count > 0)
             {
-                _isEntityHighlighted = true;
-                _nearestToCursor = World.GetNearestEntityToPointFromWorld(mousePos, myWorld);
-                PrintInfo(_nearestToCursor);
-                return;
+                _isNearestHighlighted = true;
+                _nearestEntity = World.GetNearestEntityToPointFromWorld(mousePos, myWorld);
+                PrintInfo(_nearestEntity);
             }
         }
-        PrintInstruction();
-        _isEntityHighlighted = false;
+        else
+        {
+            PrintInstruction();
+        }
     }
 
     protected override void OnMouseDown(MouseEventArgs @event)
     {
         if (@event.Button == MouseButtons.Left)
         {
-            if (drawingRect.Contains(@event.Location))
+            Point clickPoint = @event.Location;
+            clickPoint.Offset(mapNegOffset);
+
+            if (myWorld.Extents.Contains(clickPoint))
             {
-                switch (_drawToolSelected)
+                switch (_toolSelected)
                 {
                     case ESpecies.fox:
-                        new Fox(myWorld, @event.Location);
+                        new Fox(myWorld, clickPoint);
                         break;
                     case ESpecies.rabbit:
-                        new Rabbit(myWorld, @event.Location);
+                        new Rabbit(myWorld, clickPoint);
                         break;
                     case ESpecies.grass:
-                        new Grass(myWorld, @event.Location);
+                        new Grass(myWorld, clickPoint);
                         break;
                     default:
                         ClearDescription();
@@ -112,7 +113,7 @@ public partial class GUIForm : Form
 
     protected override void OnPaint(PaintEventArgs e)
     {
-        PaintTerrain(e);
+        PaintMap(e);
         PaintEntities(e);
         PaintDrawToolBox(e);
         PaintEntityHighlight(e);
@@ -122,10 +123,10 @@ public partial class GUIForm : Form
         base.OnPaint(e);
     }
 
-    private void PaintTerrain(PaintEventArgs e)
+    private void PaintMap(PaintEventArgs e)
     {
         Rectangle rect = panel.ClientRectangle;
-        rect.Offset(panel.Location);
+        rect.Offset(mapOffset);
 
         using var fill = new SolidBrush(Constants.kTerrainFillColour);
         using var stroke = new Pen(Constants.kTerrainStrokeColour, Constants.kTerrainStrokeWidth);
@@ -146,37 +147,46 @@ public partial class GUIForm : Form
                 Point pt = new Point(item.Position.X - (dia / 2), item.Position.Y - (dia / 2));
                 Size sz = new Size(dia, dia);
                 Rectangle bounds = new(pt, sz);
+                bounds.Offset(mapOffset);
+
+                SolidBrush fill;
+                Pen stroke;
 
                 LivingThing lt = item as LivingThing;
                 switch (lt.Species)
                 {
                     case ESpecies.fox:
                         {
-                            using var fill = new SolidBrush(Constants.kFoxFillColour);
-                            using var stroke = new Pen(Constants.kFoxStrokeColour, Constants.kFoxStrokeWidth);
-                            e.Graphics.FillEllipse(fill, bounds);
-                            e.Graphics.DrawEllipse(stroke, bounds);
+                            fill = new SolidBrush(Constants.kFoxFillColour);
+                            stroke = new Pen(Constants.kFoxStrokeColour, Constants.kFoxStrokeWidth);
                         }
                         break;
 
                     case ESpecies.rabbit:
                         {
-                            using var fill = new SolidBrush(Constants.kRabbitFillColour);
-                            using var stroke = new Pen(Constants.kRabbitStrokeColour, Constants.kRabbitStrokeWidth);
-                            e.Graphics.FillEllipse(fill, bounds);
-                            e.Graphics.DrawEllipse(stroke, bounds);
+                            fill = new SolidBrush(Constants.kRabbitFillColour);
+                            stroke = new Pen(Constants.kRabbitStrokeColour, Constants.kRabbitStrokeWidth);
                         }
                         break;
 
                     case ESpecies.grass:
                         {
-                            using var fill = new SolidBrush(Constants.kGrassFillColour);
-                            using var stroke = new Pen(Constants.kGrassStrokeColour, Constants.kGrassStrokeWidth);
-                            e.Graphics.FillEllipse(fill, bounds);
-                            e.Graphics.DrawEllipse(stroke, bounds);
+                            fill = new SolidBrush(Constants.kGrassFillColour);
+                            stroke = new Pen(Constants.kGrassStrokeColour, Constants.kGrassStrokeWidth);
+                        }
+                        break;
+                    default:
+                        {
+                            fill = new SolidBrush(Color.White); // defaults (not used)
+                            stroke = new Pen(Color.White, 0);   // defaults (not used)
                         }
                         break;
                 }
+
+                using var usingFill = fill;
+                using var usingStroke = stroke;
+                e.Graphics.FillEllipse(usingFill, bounds);
+                e.Graphics.DrawEllipse(usingStroke, bounds);
             }
         }
     }
@@ -184,7 +194,7 @@ public partial class GUIForm : Form
     private void PaintDrawToolBox(PaintEventArgs e)
     {
         PictureBox target = null;
-        switch (_drawToolSelected)
+        switch (_toolSelected)
         {
             case ESpecies.fox:
                 target = pictureBox1;
@@ -198,15 +208,16 @@ public partial class GUIForm : Form
         }
         Rectangle rect = target.ClientRectangle;
         rect.Offset(target.Location);
-        using var stroke = new Pen(Constants.kToolStrokeColour, Constants.kToolStrokeWidth);
+        using var stroke = new Pen(Constants.kToolHighlightColour, Constants.kToolStrokeWidth);
         e.Graphics.DrawRectangle(stroke, rect);
     }
 
     private void PaintEntityHighlight(PaintEventArgs e)
     {
-        if (_isEntityHighlighted)
+        if (_isNearestHighlighted)
         {
-            Point location = _nearestToCursor.Position;
+            Point location = _nearestEntity.Position;
+            location.Offset(mapOffset);
             location.X -= Constants.kHighlightSize / 2;
             location.Y -= Constants.kHighlightSize / 2;
 
@@ -214,7 +225,7 @@ public partial class GUIForm : Form
 
             Rectangle highlight = new(location, size);
 
-            using var stroke = new Pen(Constants.kHighlightStrokeColour, Constants.kHighlightStrokeWidth);
+            using var stroke = new Pen(Constants.kInfoHighlightColour, Constants.kHighlightStrokeWidth);
             e.Graphics.DrawRectangle(stroke, highlight);
         }
     }
@@ -228,29 +239,29 @@ public partial class GUIForm : Form
 
     private void pictureBox1_Click(object sender, EventArgs e)
     {
-        _drawToolSelected = ESpecies.fox;
+        _toolSelected = ESpecies.fox;
         PrintInstruction();
     }
 
     private void pictureBox2_Click(object sender, EventArgs e)
     {
-        _drawToolSelected = ESpecies.rabbit;
+        _toolSelected = ESpecies.rabbit;
         PrintInstruction();
     }
 
     private void pictureBox3_Click(object sender, EventArgs e)
     {
-        _drawToolSelected = ESpecies.grass;
+        _toolSelected = ESpecies.grass;
         PrintInstruction();
     }
 
     private void PrintInstruction()
     {
-        string placing = _drawToolSelected.ToString().ToUpper();
+        string placing = _toolSelected.ToString().ToUpper();
         StringBuilder instruction = new StringBuilder();
         instruction.Append(string.Format("Click map to place {0}", placing));
         instruction.Append("\nor click a different life form");
-        SafelySetLabelDescription(instruction.ToString());
+        SafelySetLabelDescription(instruction.ToString(), Constants.kToolHighlightColour);
     }
 
     private void PrintInfo(Entity ent)
@@ -258,20 +269,26 @@ public partial class GUIForm : Form
         string? text = ent.ToString();
         if (text != null)
         {
-            SafelySetLabelDescription(text);
+            SafelySetLabelDescription(text, Constants.kInfoHighlightColour);
         }
     }
 
     private void ClearDescription()
     {
-        SafelySetLabelDescription("");
+        SafelySetLabelDescription("", Constants.kNoColour);
     }
 
-    private void SafelySetLabelDescription(string text)
+    private void SafelySetLabelDescription(string text, Color colour)
     {
         if (labelDescription.InvokeRequired)
         {
+            labelDescription.ForeColor = colour;
             labelDescription.BeginInvoke(delegate { labelDescription.Text = text; });
+        }
+        else
+        {
+            labelDescription.ForeColor = colour;
+            labelDescription.Text = ". " + text;
         }
     }
 }

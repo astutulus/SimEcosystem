@@ -36,4 +36,8 @@ The afforementioned Entities act independently, and I have only just begun to im
 
 ## To do
 
-Solve offset that is making cursor feel faulty.
+- See if PointToClient() method can be used to eliminate the 'offset' calculations
+- Mass transfer when eating; animals change size to grow or disappear. Adjust positions accordingly.
+- Maybe give World a static getInstance() method, so that each Entity doesn't need to "know" it's homeworld
+
+

@@ -24,10 +24,7 @@ public class World
      */
     public string WorldName { get; }
 
-    public int MinX { get; }
-    public int MinY { get; }
-    public int MaxX { get; }
-    public int MaxY { get; }
+    public Rectangle Extents { get; }
 
     public int SpriteDia { get; }
 
@@ -39,13 +36,7 @@ public class World
     public World(string worldName, Rectangle extents, int spriteDiameter)
     {
         WorldName = worldName;
-
-        MinX = extents.X;
-        MinY = extents.Y;
-
-        MaxX = MinX + extents.Width;
-        MaxY = MinY + extents.Height;
-
+        Extents = extents;
         SpriteDia = spriteDiameter;
     }
 
@@ -96,7 +87,8 @@ public class World
     }
 
     /// <summary>
-    /// Given a set of Entities, return the Entity closest to a specified Point.
+    /// Given a NON-EMPTY set of Entities,
+    /// return the Entity closest to a specified Point.
     /// This is useful because the absolute nearest might not be the one needed.
     /// e.g. A rabbit looking for grass ignores rabbit closer than grass.
     /// </summary>
@@ -106,17 +98,7 @@ public class World
     /// <exception cref="Exception"></exception>
     public static Entity GetNearestEntityToPointFromSet(Point centre, HashSet<Entity> set)
     {
-        if (set.Count == 0) return null;
-
-        Entity nearest;
-        try
-        {
-            nearest = set.First();
-        }
-        catch
-        {
-            throw new Exception("No element found");
-        }
+        Entity nearest = set.First();
 
         double distanceToNearest = double.MaxValue;
 
@@ -142,7 +124,9 @@ public class World
         int ct = Entities.Count;
         Console.WriteLine("World contains {0} entities{1}", ct, (ct > 0 ? ": " : ". "));
         foreach (Entity e in Entities)
+        {
             Console.WriteLine(" - {0}", e);
+        }
         Console.WriteLine(); // Blank row after ToString.
     }
 }

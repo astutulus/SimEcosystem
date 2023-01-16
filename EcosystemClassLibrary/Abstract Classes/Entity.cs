@@ -27,7 +27,13 @@ public abstract class Entity : IComparable
         }
         set
         {
-            if (value > HostWorld.MinX && value < HostWorld.MaxX) _position.X = value;
+            int minX = HostWorld.Extents.X;
+            int maxX = HostWorld.Extents.X + HostWorld.Extents.Width;
+
+            if (value < minX) value = minX;
+            if (value > maxX) value = maxX;
+
+            _position.X = value;
         }
     }
 
@@ -39,7 +45,13 @@ public abstract class Entity : IComparable
         }
         set
         {
-            if (value > HostWorld.MinY && value < HostWorld.MaxY) _position.Y = value;
+            int minY = HostWorld.Extents.Y;
+            int maxY = HostWorld.Extents.Y + HostWorld.Extents.Height;
+
+            if (value < minY) value = minY;
+            if (value > maxY) value = maxY;
+
+            _position.Y = value;
         }
     }
 

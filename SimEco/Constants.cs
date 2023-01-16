@@ -17,14 +17,14 @@ internal class Constants
      * Rabbit
      */
     internal static readonly Color kRabbitFillColour = Color.DarkGray;
-    internal static readonly Color kRabbitStrokeColour = Color.SlateGray;
+    internal static readonly Color kRabbitStrokeColour = Color.DimGray;
     internal static readonly int kRabbitStrokeWidth = 4;
     
     /*
      * Grass
      */
-    internal static readonly Color kGrassFillColour = Color.Green;
-    internal static readonly Color kGrassStrokeColour = Color.DarkGreen;
+    internal static readonly Color kGrassFillColour = Color.OliveDrab;
+    internal static readonly Color kGrassStrokeColour = Color.DarkOliveGreen;
     internal static readonly int kGrassStrokeWidth = 4;
 
     /*
@@ -37,13 +37,16 @@ internal class Constants
     /*
      * SpeciesSelectBox
      */
-    internal static readonly Color kToolStrokeColour = Color.IndianRed;
+    internal static readonly Color kToolHighlightColour = Color.MediumVioletRed;
     internal static readonly int kToolStrokeWidth = 12;
 
     /*
      * Highlight
      */
     internal const int kHighlightSize = 56;
-    internal static readonly Color kHighlightStrokeColour = Color.RebeccaPurple;
+    internal static readonly Color kInfoHighlightColour = Color.DodgerBlue;
     internal static readonly int kHighlightStrokeWidth = 2;
+
+
+    internal static Color kNoColour = Color.AntiqueWhite;
 }
