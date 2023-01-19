@@ -81,28 +81,23 @@ public abstract class Entity : IComparable
      * 
      * returns true when arrived
      */
-    public bool MoveTowardsPoint(Point pt, double dist, int stop)
+    public void MoveTowardsPoint(Point pt, double dist)
     {
-
-        if (GetDistanceToPoint(pt) < stop)
-        {
-            return true;
-        }
-        else
+        if (GetDistanceToPoint(pt) > dist)
         {
             double adjacent = pt.X - Position.X;
             double opposite = pt.Y - Position.Y;
 
             double angle = Math.Atan(opposite / adjacent);
-
-            if (Position.X > pt.X) angle += Math.PI;
+            if (Position.X > pt.X)
+            {
+                angle += Math.PI;
+            }
 
             double dx = dist * Math.Cos(angle);
             double dy = dist * Math.Sin(angle);
 
             Position = new(Position.X + (int)dx, Position.Y + (int)dy);
-
-            return false;
         }
     }
 

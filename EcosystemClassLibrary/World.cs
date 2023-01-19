@@ -26,18 +26,15 @@ public class World
 
     public Rectangle Extents { get; }
 
-    public int SpriteDia { get; }
-
 
 
     /*
      * Constructors
      */
-    public World(string worldName, Rectangle extents, int spriteDiameter)
+    public World(string worldName, Rectangle extents)
     {
         WorldName = worldName;
         Extents = extents;
-        SpriteDia = spriteDiameter;
     }
 
 

@@ -32,7 +32,7 @@ public abstract class LivingThing : Entity
     /*
      * Properties
      */
-    internal double Mass { get => _mass; set => _mass = value; }
+    public double Mass { get => _mass; set => _mass = value; }
     protected double TypMass { get => _typMass; private set => _typMass = value; }
 
     protected TimeSpan Lifespan { get => _lifespan; private set => _lifespan = value; }

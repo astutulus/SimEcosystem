@@ -64,8 +64,14 @@ public abstract class Animal : LivingThing
         if (SeenFood.Any()) // tests if not empty
         {
             LivingThing food = SeenFood.First();
-            MoveTowardsPoint(food.Position, StepSize, HostWorld.SpriteDia);
-            Activity = EActivity.goingToFood;
+
+            double touching = Mass / 2 + food.Mass / 2;
+
+            if (GetDistanceToPoint(food.Position) > touching)
+            {
+                MoveTowardsPoint(food.Position, StepSize);
+                Activity = EActivity.goingToFood;
+            }
         }
         else
         {

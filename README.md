@@ -36,21 +36,20 @@ The afforementioned Entities act independently, and I have only just begun to im
 
 ## To Do List
 
-The GUI is fit for purpose for the moment. Most of the interesting (math) ideas involve expansion of the Class Library
+The GUI is fit for purpose for the moment; the following ideas involve development of the Class Library.
 
-### GUI
+- No Entity to overlap.
+- Entity to push others away when growing.
 
-- Entities to have size proportional to mass.
+- Plant to increase mass when growing.
+- Plant to reduce mass when eaten.
+- LivingThings to disappear when mass zero.
 
-### Class Library
-
-- Entity to have separation according to mass (size).
-
-- Plant to have mass reduction when eaten.
+- Herbivores to increase mass when eating.
+- Herbivores to reduce mass when not eating.
 
 - Prey to die when caught by Predator.
 - Animal to have mass transfer when eating.
-- LivingThings to disappear when mass zero.
 
 - World to have static getInstance() method, so that...
 - Entity to have no more, it's own home-World object reference.

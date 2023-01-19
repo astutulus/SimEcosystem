@@ -11,7 +11,7 @@ public abstract class Plant : LivingThing
     /* Methods */
     protected override void Behaviour()
     {
-        Grow();
+        // Grow(); To add after adding "eating"
     } 
 
     protected void Grow()

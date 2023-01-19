@@ -33,14 +33,14 @@ internal class Constants
     /*
      * Mass: when fully grown
      */
-    internal static double kTypMassFox = 10d;
-    internal static double kTypMassRabbit = 4d;
-    internal static double kTypMassGrass = 2d;
+    internal static double kTypMassFox = 52d;
+    internal static double kTypMassRabbit = 36d;
+    internal static double kTypMassGrass = 72d;
 
     /*
      * Mass: proportion of maximum when spawning new life
      */
-    internal static double kStartMassMultiple = 0.5;
+    internal static double kStartMassMultiple = 0.9;
 
     /*
      * Mass: Ammount transferred when eating

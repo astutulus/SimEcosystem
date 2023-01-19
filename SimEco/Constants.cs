@@ -4,7 +4,7 @@ internal class Constants
 {
     internal const int kRefreshDelayMs = 100;
 
-    internal const int kSpriteDia = 40;
+    internal const int kMargin = 40;
 
     /*
      * Fox
@@ -43,7 +43,7 @@ internal class Constants
     /*
      * Highlight
      */
-    internal const int kHighlightSize = 56;
+    internal const int kHighlightMargin = 10;
     internal static readonly Color kInfoHighlightColour = Color.DodgerBlue;
     internal static readonly int kHighlightStrokeWidth = 2;
 

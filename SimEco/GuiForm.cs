@@ -6,8 +6,7 @@ namespace SimEco;
 public partial class GUIForm : Form
 {
     private bool _running = true;
-    private Boolean _isNearestHighlighted = false;
-    private Entity? _nearestEntity = null;
+    private Entity? _nearestToCursor = null;
     private ESpecies _toolSelected = ESpecies.grass;
 
     private readonly Rectangle worldEdge;
@@ -18,11 +17,11 @@ public partial class GUIForm : Form
         InitializeComponent();
 
         worldEdge = panel.ClientRectangle;
-        worldEdge.Width -= Constants.kSpriteDia;
-        worldEdge.Height -= Constants.kSpriteDia;
-        worldEdge.Offset(Constants.kSpriteDia / 2, Constants.kSpriteDia / 2);
+        worldEdge.Width -= Constants.kMargin;
+        worldEdge.Height -= Constants.kMargin;
+        worldEdge.Offset(Constants.kMargin / 2, Constants.kMargin / 2);
 
-        myWorld = new("Robinland", worldEdge, Constants.kSpriteDia);
+        myWorld = new("Robinland", worldEdge);
 
         _toolSelected = ESpecies.rabbit;
         foxTxt.Text = "";
@@ -62,15 +61,14 @@ public partial class GUIForm : Form
         {
             if (myWorld.Entities.Count > 0)
             {
-                _isNearestHighlighted = true;
-                _nearestEntity = World.GetNearestEntityToPointFromWorld(mousePos, myWorld);
-                PrintInfo(_nearestEntity);
+                _nearestToCursor = World.GetNearestEntityToPointFromWorld(mousePos, myWorld);
+                PrintInfo(_nearestToCursor);
             }
         }
         else
         {
+            _nearestToCursor = null;
             PrintInstruction();
-            _isNearestHighlighted = false;
         }
     }
 
@@ -129,55 +127,60 @@ public partial class GUIForm : Form
 
     private void PaintEntities(PaintEventArgs e)
     {
-        foreach (Entity item in myWorld.Entities)
+        foreach (Entity ent in myWorld.Entities)
         {
-            if (item is LivingThing)
+            if (ent is LivingThing)
             {
-                int dia = Constants.kSpriteDia;
+                LivingThing? item = ent as LivingThing;
 
-                Point pt = new Point(item.Position.X - (dia / 2), item.Position.Y - (dia / 2));
-                Size sz = new Size(dia, dia);
-                Rectangle bounds = new(pt, sz);
-                bounds.Offset(panel.Location);
-
-                SolidBrush fill;
-                Pen stroke;
-
-                LivingThing lt = item as LivingThing;
-                switch (lt.Species)
+                if (item is not null)
                 {
-                    case ESpecies.fox:
-                        {
-                            fill = new SolidBrush(Constants.kFoxFillColour);
-                            stroke = new Pen(Constants.kFoxStrokeColour, Constants.kFoxStrokeWidth);
-                        }
-                        break;
+                    int dia = (int)item.Mass;
 
-                    case ESpecies.rabbit:
-                        {
-                            fill = new SolidBrush(Constants.kRabbitFillColour);
-                            stroke = new Pen(Constants.kRabbitStrokeColour, Constants.kRabbitStrokeWidth);
-                        }
-                        break;
+                    Point pt = new Point(item.Position.X - (dia / 2), item.Position.Y - (dia / 2));
+                    Size sz = new Size(dia, dia);
+                    Rectangle bounds = new(pt, sz);
+                    bounds.Offset(panel.Location);
 
-                    case ESpecies.grass:
-                        {
-                            fill = new SolidBrush(Constants.kGrassFillColour);
-                            stroke = new Pen(Constants.kGrassStrokeColour, Constants.kGrassStrokeWidth);
-                        }
-                        break;
-                    default:
-                        {
-                            fill = new SolidBrush(Color.White); // defaults (not used)
-                            stroke = new Pen(Color.White, 0);   // defaults (not used)
-                        }
-                        break;
+                    SolidBrush fill;
+                    Pen stroke;
+
+                    LivingThing lt = item as LivingThing;
+                    switch (lt.Species)
+                    {
+                        case ESpecies.fox:
+                            {
+                                fill = new SolidBrush(Constants.kFoxFillColour);
+                                stroke = new Pen(Constants.kFoxStrokeColour, Constants.kFoxStrokeWidth);
+                            }
+                            break;
+
+                        case ESpecies.rabbit:
+                            {
+                                fill = new SolidBrush(Constants.kRabbitFillColour);
+                                stroke = new Pen(Constants.kRabbitStrokeColour, Constants.kRabbitStrokeWidth);
+                            }
+                            break;
+
+                        case ESpecies.grass:
+                            {
+                                fill = new SolidBrush(Constants.kGrassFillColour);
+                                stroke = new Pen(Constants.kGrassStrokeColour, Constants.kGrassStrokeWidth);
+                            }
+                            break;
+                        default:
+                            {
+                                fill = new SolidBrush(Color.White); // defaults (not used)
+                                stroke = new Pen(Color.White, 0);   // defaults (not used)
+                            }
+                            break;
+                    }
+
+                    using var usingFill = fill;
+                    using var usingStroke = stroke;
+                    e.Graphics.FillEllipse(usingFill, bounds);
+                    e.Graphics.DrawEllipse(usingStroke, bounds);
                 }
-
-                using var usingFill = fill;
-                using var usingStroke = stroke;
-                e.Graphics.FillEllipse(usingFill, bounds);
-                e.Graphics.DrawEllipse(usingStroke, bounds);
             }
         }
     }
@@ -205,19 +208,27 @@ public partial class GUIForm : Form
 
     private void PaintEntityHighlight(PaintEventArgs e)
     {
-        if (_isNearestHighlighted)
+        if (_nearestToCursor is LivingThing)
         {
-            Point location = _nearestEntity.Position;
-            location.Offset(panel.Location);
-            location.X -= Constants.kHighlightSize / 2;
-            location.Y -= Constants.kHighlightSize / 2;
+            LivingThing? highlighted = _nearestToCursor as LivingThing;
 
-            Size size = new(Constants.kHighlightSize, Constants.kHighlightSize);
+            if (highlighted is not null)
+            {
+                int mass = (int)highlighted.Mass;
 
-            Rectangle highlight = new(location, size);
+                int dimension = mass + Constants.kHighlightMargin * 2;
+                Size highlightSize = new(dimension, dimension);
 
-            using var stroke = new Pen(Constants.kInfoHighlightColour, Constants.kHighlightStrokeWidth);
-            e.Graphics.DrawRectangle(stroke, highlight);
+                Point highlightLocation = highlighted.Position;
+                highlightLocation.Offset(panel.Location);
+                highlightLocation.X -= mass / 2 + Constants.kHighlightMargin;
+                highlightLocation.Y -= mass / 2 + Constants.kHighlightMargin;
+
+                Rectangle highlight = new(highlightLocation, highlightSize);
+
+                using var stroke = new Pen(Constants.kInfoHighlightColour, Constants.kHighlightStrokeWidth);
+                e.Graphics.DrawRectangle(stroke, highlight);
+            }
         }
     }
 
