@@ -1,6 +1,6 @@
 # Simulated Ecosystem
 
-A fun personal project intended to practise some C# techniques, rather than being a particularly accurate model of animal behviour! Solution comprises two projects:
+A fun project, created in my own time. Intended to practise any C# techniques I learn about. No intent to be a particularly accurate model of animal behviour! Solution comprises two projects:
 
 ## Project 1: EcosystemClassLibrary
 
@@ -30,20 +30,29 @@ Entry point. References the project above.
 
 Windows Form that allows the user to place Grass, Rabbits and Foxes on a blank field.
 
-Entities are represented by coloured circles. The goal is not currently to master computer graphics.
+Entities are represented by coloured circles. The goal is *not* currently to master computer graphics!
 
 The afforementioned Entities act independently, and I have only just begun to implement their behaviour.
 
-## To do list
+## To Do List
 
-### To do - GUI
+The GUI is fit for purpose for the moment. Most of the interesting (math) ideas involve expansion of the Class Library
 
-- Entities size proportional to mass; and separation according to size.
-- Animal dies when start to be eaten.
-- LivingThings disappear when mass zero.
+### GUI
 
-### To do - Class Library
+- Entities to have size proportional to mass.
 
-- Mass transfer when eating.
-- Give World class a static getInstance() method, so that...
-- Each Entity doesn't store it's home-World object reference.
+### Class Library
+
+- Entity to have separation according to mass (size).
+
+- Plant to have mass reduction when eaten.
+
+- Prey to die when caught by Predator.
+- Animal to have mass transfer when eating.
+- LivingThings to disappear when mass zero.
+
+- World to have static getInstance() method, so that...
+- Entity to have no more, it's own home-World object reference.
+
+- Herbivore to sense fear (controlled by proximity of predator vs hunger level).
