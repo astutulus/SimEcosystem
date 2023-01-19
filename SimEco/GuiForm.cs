@@ -13,10 +13,6 @@ public partial class GUIForm : Form
     private readonly Rectangle worldEdge;
     private readonly World myWorld;
 
-    Point mapOffset;
-    Point mapNegOffset;
-
-
     public GUIForm()
     {
         InitializeComponent();
@@ -27,11 +23,6 @@ public partial class GUIForm : Form
         worldEdge.Offset(Constants.kSpriteDia / 2, Constants.kSpriteDia / 2);
 
         myWorld = new("Robinland", worldEdge, Constants.kSpriteDia);
-
-        mapOffset = panel.Location;
-        mapNegOffset = mapOffset;
-        mapNegOffset.X *= -1;
-        mapNegOffset.Y *= -1;
 
         _toolSelected = ESpecies.rabbit;
         foxTxt.Text = "";
@@ -79,6 +70,7 @@ public partial class GUIForm : Form
         else
         {
             PrintInstruction();
+            _isNearestHighlighted = false;
         }
     }
 
@@ -86,21 +78,20 @@ public partial class GUIForm : Form
     {
         if (@event.Button == MouseButtons.Left)
         {
-            Point clickPoint = @event.Location;
-            clickPoint.Offset(mapNegOffset);
+            var clickPos = panel.PointToClient(Cursor.Position);
 
-            if (myWorld.Extents.Contains(clickPoint))
+            if (myWorld.Extents.Contains(clickPos))
             {
                 switch (_toolSelected)
                 {
                     case ESpecies.fox:
-                        new Fox(myWorld, clickPoint);
+                        new Fox(myWorld, clickPos);
                         break;
                     case ESpecies.rabbit:
-                        new Rabbit(myWorld, clickPoint);
+                        new Rabbit(myWorld, clickPos);
                         break;
                     case ESpecies.grass:
-                        new Grass(myWorld, clickPoint);
+                        new Grass(myWorld, clickPos);
                         break;
                     default:
                         ClearDescription();
@@ -126,7 +117,7 @@ public partial class GUIForm : Form
     private void PaintMap(PaintEventArgs e)
     {
         Rectangle rect = panel.ClientRectangle;
-        rect.Offset(mapOffset);
+        rect.Offset(panel.Location);
 
         using var fill = new SolidBrush(Constants.kTerrainFillColour);
         using var stroke = new Pen(Constants.kTerrainStrokeColour, Constants.kTerrainStrokeWidth);
@@ -147,7 +138,7 @@ public partial class GUIForm : Form
                 Point pt = new Point(item.Position.X - (dia / 2), item.Position.Y - (dia / 2));
                 Size sz = new Size(dia, dia);
                 Rectangle bounds = new(pt, sz);
-                bounds.Offset(mapOffset);
+                bounds.Offset(panel.Location);
 
                 SolidBrush fill;
                 Pen stroke;
@@ -217,7 +208,7 @@ public partial class GUIForm : Form
         if (_isNearestHighlighted)
         {
             Point location = _nearestEntity.Position;
-            location.Offset(mapOffset);
+            location.Offset(panel.Location);
             location.X -= Constants.kHighlightSize / 2;
             location.Y -= Constants.kHighlightSize / 2;
 

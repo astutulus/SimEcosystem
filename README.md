@@ -34,10 +34,16 @@ Entities are represented by coloured circles. The goal is not currently to maste
 
 The afforementioned Entities act independently, and I have only just begun to implement their behaviour.
 
-## To do
+## To do list
 
-- See if PointToClient() method can be used to eliminate the 'offset' calculations
-- Mass transfer when eating; animals change size to grow or disappear. Adjust positions accordingly.
-- Maybe give World a static getInstance() method, so that each Entity doesn't need to "know" it's homeworld
+### To do - GUI
 
+- Entities size proportional to mass; and separation according to size.
+- Animal dies when start to be eaten.
+- LivingThings disappear when mass zero.
 
+### To do - Class Library
+
+- Mass transfer when eating.
+- Give World class a static getInstance() method, so that...
+- Each Entity doesn't store it's home-World object reference.
