@@ -4,7 +4,7 @@ namespace EcosystemClassLibrary;
 
 internal class Rock : Entity
 {
-    public Rock(World world, Point position) : base(world, position)
+    public Rock(Point position) : base(position)
     {
 
     }

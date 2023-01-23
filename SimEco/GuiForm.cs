@@ -5,12 +5,12 @@ namespace SimEco;
 
 public partial class GUIForm : Form
 {
+    private readonly World myWorld;
+    private readonly Rectangle worldEdge;
+
     private bool _running = true;
     private Entity? _nearestToCursor = null;
     private ESpecies _toolSelected = ESpecies.grass;
-
-    private readonly Rectangle worldEdge;
-    private readonly World myWorld;
 
     public GUIForm()
     {
@@ -83,13 +83,13 @@ public partial class GUIForm : Form
                 switch (_toolSelected)
                 {
                     case ESpecies.fox:
-                        new Fox(myWorld, clickPos);
+                        new Fox(clickPos);
                         break;
                     case ESpecies.rabbit:
-                        new Rabbit(myWorld, clickPos);
+                        new Rabbit(clickPos);
                         break;
                     case ESpecies.grass:
-                        new Grass(myWorld, clickPos);
+                        new Grass(clickPos);
                         break;
                     default:
                         ClearDescription();

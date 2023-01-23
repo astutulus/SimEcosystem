@@ -49,7 +49,7 @@ public abstract class LivingThing : Entity
 
 
     /* Constructors */
-    public LivingThing(World world, Point position, double typMass, TimeSpan lifespan) : base(world, position)
+    public LivingThing(Point position, double typMass, TimeSpan lifespan) : base(position)
     {
         Mass = typMass * Constants.kStartMassMultiple;
         TypMass = typMass;
@@ -82,7 +82,7 @@ public abstract class LivingThing : Entity
 
     protected void Birth()
     {
-        HostWorld.CreateEntity(this);
+        World.Instance.CreateEntity(this);
         IsAlive = true;
     }
 
@@ -100,7 +100,7 @@ public abstract class LivingThing : Entity
     {
         IsAlive = false;
         Thread.Sleep(Constants.kDecayTime);
-        HostWorld.SmiteEntity(this);
+        World.Instance.SmiteEntity(this);
     }
 
     public static int GetSpeciesCount(ESpecies species)

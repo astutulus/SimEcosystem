@@ -26,8 +26,8 @@ public abstract class Animal : LivingThing
 
 
     /* Constructors */
-    protected Animal(World world, Point position, double typMass, TimeSpan lifespan) :
-        base(world, position, typMass, lifespan)
+    protected Animal(Point position, double typMass, TimeSpan lifespan) :
+        base(position, typMass, lifespan)
     {
         Activity = EActivity.resting;
     }
@@ -101,7 +101,7 @@ public abstract class Animal : LivingThing
     public List<LivingThing> LookForSpeciesOfInterest(HashSet<ESpecies> speciesOfInterest)
     {
         HashSet<Entity> found = new();
-        foreach (Entity seen in HostWorld.GetEntitiesWithinRadiusOfPoint(Position, Eyesight))
+        foreach (Entity seen in World.Instance.GetEntitiesWithinRadiusOfPoint(Position, Eyesight))
         {
             if (seen is LivingThing thing && speciesOfInterest.Contains(thing.Species)) // Pattern matching
             {

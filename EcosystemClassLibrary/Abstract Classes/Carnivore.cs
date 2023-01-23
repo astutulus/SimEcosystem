@@ -12,8 +12,8 @@ public abstract class Carnivore : Animal
 
 
     /* Constructors */
-    protected Carnivore(World world, Point position, double typMass, TimeSpan lifespan, HashSet<ESpecies> prey) 
-        : base(world, position, typMass, lifespan)
+    protected Carnivore(Point position, double typMass, TimeSpan lifespan, HashSet<ESpecies> prey) 
+        : base(position, typMass, lifespan)
     { 
         PreySpecies = prey;
     }

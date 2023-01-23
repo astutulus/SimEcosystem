@@ -4,8 +4,8 @@ namespace EcosystemClassLibrary;
 
 public class Fox : Carnivore
 {
-    public Fox(World world, Point position) : 
-        base(world, position, Constants.kTypMassFox, Constants.kLifespanFox, Constants.kFoodOfFox)
+    public Fox(Point position) : 
+        base(position, Constants.kTypMassFox, Constants.kLifespanFox, Constants.kFoodOfFox)
     {
         Species = ESpecies.fox;
         SpeciesTally++;       

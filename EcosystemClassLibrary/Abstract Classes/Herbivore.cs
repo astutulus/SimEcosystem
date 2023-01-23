@@ -15,8 +15,8 @@ public abstract class Herbivore : Animal
 
 
     /* Constructors */
-    protected Herbivore(World world, Point position, double typMass, TimeSpan lifespan, HashSet<ESpecies> food) : 
-        base(world, position, typMass, lifespan) 
+    protected Herbivore(Point position, double typMass, TimeSpan lifespan, HashSet<ESpecies> food) : 
+        base(position, typMass, lifespan) 
     {
         FoodSpecies = food;
     }

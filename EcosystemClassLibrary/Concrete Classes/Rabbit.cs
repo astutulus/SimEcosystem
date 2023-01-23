@@ -4,8 +4,8 @@ namespace EcosystemClassLibrary;
 
 public class Rabbit : Herbivore
 {
-    public Rabbit(World world, Point position) : 
-        base(world, position, Constants.kTypMassRabbit, Constants.kLifespanRabbit, Constants.kFoodOfRabbit)
+    public Rabbit(Point position) : 
+        base(position, Constants.kTypMassRabbit, Constants.kLifespanRabbit, Constants.kFoodOfRabbit)
     {
         Species = ESpecies.rabbit;
         SpeciesTally++;

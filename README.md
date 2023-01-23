@@ -38,6 +38,10 @@ The afforementioned Entities act independently, and I have only just begun to im
 
 The GUI is fit for purpose for the moment; the following ideas involve development of the Class Library.
 
+- Qty of each Entity ("Tally") next to each tool, in GUI
+
+- Every entity to track every other Entity.
+
 - No Entity to overlap.
 - Entity to push others away when growing.
 
@@ -50,8 +54,5 @@ The GUI is fit for purpose for the moment; the following ideas involve developme
 
 - Prey to die when caught by Predator.
 - Animal to have mass transfer when eating.
-
-- World to have static getInstance() method, so that...
-- Entity to have no more, it's own home-World object reference.
 
 - Herbivore to sense fear (controlled by proximity of predator vs hunger level).

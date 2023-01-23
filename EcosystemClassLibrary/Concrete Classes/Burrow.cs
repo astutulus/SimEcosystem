@@ -4,7 +4,7 @@ namespace EcosystemClassLibrary
 {
     internal class Burrow : Entity
     {
-        public Burrow(World world, Point position) : base(world, position)
+        public Burrow(Point position) : base(position)
         {
 
         }
