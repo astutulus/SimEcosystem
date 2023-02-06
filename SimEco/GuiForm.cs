@@ -1,5 +1,7 @@
 ﻿using EcosystemClassLibrary;
+using System.Drawing;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SimEco;
 
@@ -11,6 +13,10 @@ public partial class GUIForm : Form
     private bool _running = true;
     private Entity? _nearestToCursor = null;
     private ESpecies _toolSelected = ESpecies.grass;
+
+    // So I fixed a hard bug, by moving this out of the only function that uses it.
+    // To do: understand why it can't be in that fnction.
+    private Point mousePos;
 
     public GUIForm()
     {
@@ -30,32 +36,32 @@ public partial class GUIForm : Form
 
         PrintInstruction();
 
-        Thread refresh = new(RefreshScreen);
+        Thread refresh = new(Run);
         refresh.Start();
     }
 
-    /*
-     * Main "game loop"
-     */
-    void RefreshScreen()
+    void Run()
     {
         while (_running)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Thread.Sleep(Constants.kRefreshDelayMs);
-                Invalidate();
-            }
-            // Every tenth cycle check the following
-
-            // Text labels by tools
-            // foxTxt.Text = LivingThing.GetSpeciesCount(ESpecies.fox).ToString();
+            Thread.Sleep(Constants.kRefreshDelayMs);
+            ActOnMousePos();
+            UpdateTextValues();
+            Invalidate();
         }
     }
 
-    protected override void OnMouseMove(MouseEventArgs @event)
+    private void ActOnMousePos()
     {
-        var mousePos = panel.PointToClient(Cursor.Position);
+
+        if (panel.InvokeRequired)
+        {
+            panel.BeginInvoke(delegate { mousePos = panel.PointToClient(Cursor.Position); });
+        }
+        else
+        {
+            mousePos = panel.PointToClient(Cursor.Position);
+        }
 
         if (worldEdge.Contains(mousePos))
         {
@@ -98,6 +104,12 @@ public partial class GUIForm : Form
             }
         }
         base.OnMouseDown(@event);
+    }
+
+    private void UpdateTextValues()
+    {
+        // Text labels by tools
+        // foxTxt.Text = LivingThing.GetSpeciesCount(ESpecies.fox).ToString();
     }
 
     protected override void OnPaint(PaintEventArgs e)
