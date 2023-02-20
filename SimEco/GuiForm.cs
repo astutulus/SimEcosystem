@@ -104,10 +104,16 @@ public partial class GUIForm : Form
         base.OnMouseDown(@event);
     }
 
+    // Text labels by tools
     private void UpdateTextValues()
     {
-        // Text labels by tools
-        // foxTxt.Text = LivingThing.GetSpeciesCount(ESpecies.fox).ToString();
+        string fox = LivingThing.GetSpeciesCount(ESpecies.fox).ToString();
+        string rab = LivingThing.GetSpeciesCount(ESpecies.rabbit).ToString();
+        string gra = LivingThing.GetSpeciesCount(ESpecies.grass).ToString();
+
+        SafelySetAnyLabelDescription(foxTxt, fox, Constants.kFoxFillColour);
+        SafelySetAnyLabelDescription(rabbitTxt, rab, Constants.kRabbitFillColour);
+        SafelySetAnyLabelDescription(grassTxt, gra, Constants.kGrassFillColour);
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -304,4 +310,5 @@ public partial class GUIForm : Form
             lab.Text = ". " + text;
         }
     }
+
 }

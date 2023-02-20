@@ -47,7 +47,7 @@
             // 
             this.panel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel.Location = new System.Drawing.Point(170, 75);
+            this.panel.Location = new System.Drawing.Point(270, 75);
             this.panel.Margin = new System.Windows.Forms.Padding(0);
             this.panel.Name = "panel";
             this.panel.Size = new System.Drawing.Size(400, 400);
@@ -58,7 +58,7 @@
             // 
             this.labelCount.AutoSize = true;
             this.labelCount.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelCount.Location = new System.Drawing.Point(486, 36);
+            this.labelCount.Location = new System.Drawing.Point(600, 36);
             this.labelCount.Name = "labelCount";
             this.labelCount.Size = new System.Drawing.Size(67, 30);
             this.labelCount.TabIndex = 2;
@@ -68,7 +68,7 @@
             // 
             this.labelDescription.AutoSize = true;
             this.labelDescription.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelDescription.Location = new System.Drawing.Point(168, 12);
+            this.labelDescription.Location = new System.Drawing.Point(270, 12);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(69, 15);
             this.labelDescription.TabIndex = 3;
@@ -76,7 +76,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(486, 12);
+            this.button1.Location = new System.Drawing.Point(585, 12);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(82, 22);
@@ -121,43 +121,43 @@
             // foxTxt
             // 
             this.foxTxt.AutoSize = true;
-            this.foxTxt.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.foxTxt.Location = new System.Drawing.Point(92, 132);
+            this.foxTxt.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.foxTxt.Location = new System.Drawing.Point(213, 117);
             this.foxTxt.Name = "foxTxt";
-            this.foxTxt.Size = new System.Drawing.Size(70, 30);
+            this.foxTxt.Size = new System.Drawing.Size(54, 45);
             this.foxTxt.TabIndex = 7;
-            this.foxTxt.Text = "foxTxt";
+            this.foxTxt.Text = "FF";
             this.foxTxt.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // rabbitTxt
             // 
             this.rabbitTxt.AutoSize = true;
-            this.rabbitTxt.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.rabbitTxt.Location = new System.Drawing.Point(65, 288);
+            this.rabbitTxt.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.rabbitTxt.Location = new System.Drawing.Point(205, 273);
             this.rabbitTxt.Name = "rabbitTxt";
-            this.rabbitTxt.Size = new System.Drawing.Size(97, 30);
+            this.rabbitTxt.Size = new System.Drawing.Size(62, 45);
             this.rabbitTxt.TabIndex = 8;
-            this.rabbitTxt.Text = "rabbitTxt";
+            this.rabbitTxt.Text = "RR";
             this.rabbitTxt.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // grassTxt
             // 
             this.grassTxt.AutoSize = true;
-            this.grassTxt.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.grassTxt.Location = new System.Drawing.Point(75, 446);
+            this.grassTxt.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.grassTxt.Location = new System.Drawing.Point(201, 428);
             this.grassTxt.Name = "grassTxt";
-            this.grassTxt.Size = new System.Drawing.Size(90, 30);
+            this.grassTxt.Size = new System.Drawing.Size(66, 45);
             this.grassTxt.TabIndex = 9;
-            this.grassTxt.Text = "grassTxt";
+            this.grassTxt.Text = "GG";
             this.grassTxt.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // GUIForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 488);
-            this.Controls.Add(this.foxTxt);
+            this.ClientSize = new System.Drawing.Size(679, 482);
             this.Controls.Add(this.grassTxt);
+            this.Controls.Add(this.foxTxt);
             this.Controls.Add(this.rabbitTxt);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.labelDescription);
