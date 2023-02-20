@@ -1,7 +1,5 @@
 ﻿using EcosystemClassLibrary;
-using System.Drawing;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SimEco;
 
@@ -275,7 +273,7 @@ public partial class GUIForm : Form
         StringBuilder instruction = new StringBuilder();
         instruction.Append(string.Format("Click map to place {0}", placing));
         instruction.Append("\nor click a different life form");
-        SafelySetLabelDescription(instruction.ToString(), Constants.kToolHighlightColour);
+        SafelySetAnyLabelDescription(labelDescription, instruction.ToString(), Constants.kToolHighlightColour);
     }
 
     private void PrintInfo(Entity ent)
@@ -283,26 +281,27 @@ public partial class GUIForm : Form
         string? text = ent.ToString();
         if (text != null)
         {
-            SafelySetLabelDescription(text, Constants.kInfoHighlightColour);
+            SafelySetAnyLabelDescription(labelDescription, text, Constants.kInfoHighlightColour);
         }
     }
 
     private void ClearDescription()
     {
-        SafelySetLabelDescription("", Constants.kNoColour);
+        SafelySetAnyLabelDescription(labelDescription, "", Constants.kNoColour);
     }
 
-    private void SafelySetLabelDescription(string text, Color colour)
+
+    private void SafelySetAnyLabelDescription(Label lab, string text, Color colour)
     {
-        if (labelDescription.InvokeRequired)
+        if (lab.InvokeRequired)
         {
-            labelDescription.ForeColor = colour;
-            labelDescription.BeginInvoke(delegate { labelDescription.Text = text; });
+            lab.ForeColor = colour;
+            lab.BeginInvoke(delegate { lab.Text = text; });
         }
         else
         {
-            labelDescription.ForeColor = colour;
-            labelDescription.Text = ". " + text;
+            lab.ForeColor = colour;
+            lab.Text = ". " + text;
         }
     }
 }
