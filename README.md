@@ -1,10 +1,14 @@
 # Simulated Ecosystem
 
-A fun project, created in my own time. Intended to practise any C# techniques I learn about. No intent to be a particularly accurate model of animal behviour! Solution comprises two projects:
+### Keywords
+GUI, animation, events, algorithms, architecture
+
+Visual Studio 2022 Solution comprising two projects:
 
 ## Project 1: EcosystemClassLibrary
 
-Inheritance heirarchy. All superclasses are abstract.
+Inheritance heirarchy. 
+All superclasses are abstract; only 'leaf' classes are concrete.
 
     Entity
       ├─── Terrain
@@ -21,24 +25,24 @@ Inheritance heirarchy. All superclasses are abstract.
                            
 - Every Entity has a Position (in pixels on the screen)
 - Every LivingThing has a DateTime "Birthday" (e.g. a moment ago when spawned), and a Lifespan (e.g. 2 minutes)
-- Every Animal looks for it's required Food.
-- etc.
+- Every Animal looks for it's required Food, and moves toward it.
+- Not a very accurate model of animal behviour!
 
 ## Project 2: SimEco
 
-Entry point. References the project above.
+References the project above.
 
-Windows Form that allows the user to place Grass, Rabbits and Foxes on a blank field.
+Entry point. A Windows Form that allows the user to place Grass, Rabbits and Foxes on a blank field.
 
-Entities are represented by coloured circles. The goal is *not* currently to master computer graphics!
+These entities:
+- are sufficiently represented by coloured circles.
+- act independently, and I have only just begun to implement their behaviour.
 
-The afforementioned Entities act independently, and I have only just begun to implement their behaviour.
-
-## To Do List
+# TODO List
 
 The GUI is fit for purpose for the moment; the following ideas involve development of the Class Library.
 
-- Qty of each Entity ("Tally") next to each tool, in GUI
+- Qty of each Entity ("count") next to each tool, in GUI
 
 - Every entity to track every other Entity.
 
@@ -56,3 +60,5 @@ The GUI is fit for purpose for the moment; the following ideas involve developme
 - Animal to have mass transfer when eating.
 
 - Herbivore to sense fear (controlled by proximity of predator vs hunger level).
+
+- Replace the World singleton

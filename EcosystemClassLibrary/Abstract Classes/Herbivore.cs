@@ -5,6 +5,7 @@ namespace EcosystemClassLibrary;
 
 public abstract class Herbivore : Animal
 {
+
     /* Fields */
     private HashSet<ESpecies> _foodSpecies = new();
 

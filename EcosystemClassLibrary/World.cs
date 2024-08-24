@@ -7,13 +7,12 @@ public class World
     /*
      * Static Instance
      */
-    public static World? _instance;
+    public static World _instance; 
 
     /*
      * Fields
      */
     private HashSet<Entity> _entities = new();
-
 
     /*
      * Properties
@@ -23,7 +22,7 @@ public class World
     /// All entities in the world
     /// </summary>
     public HashSet<Entity> Entities { get => _entities; set => _entities = value; }
-    public static World? Instance { get => _instance; set => _instance = value; }
+    public static World Instance { get { return _instance; } set => _instance = value; }
 
     /*
      * Properties withouf Fields and which are implictly "readonly" (set by constructor)

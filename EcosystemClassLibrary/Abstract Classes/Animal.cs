@@ -101,14 +101,16 @@ public abstract class Animal : LivingThing
     public List<LivingThing> LookForSpeciesOfInterest(HashSet<ESpecies> speciesOfInterest)
     {
         HashSet<Entity> found = new();
-        foreach (Entity seen in World.Instance.GetEntitiesWithinRadiusOfPoint(Position, Eyesight))
+        if (World.Instance != null)
         {
-            if (seen is LivingThing thing && speciesOfInterest.Contains(thing.Species)) // Pattern matching
+            foreach (Entity seen in World.Instance.GetEntitiesWithinRadiusOfPoint(Position, Eyesight))
             {
-                found.Add(seen);
+                if (seen is LivingThing thing && speciesOfInterest.Contains(thing.Species)) // Pattern matching
+                {
+                    found.Add(seen);
+                }
             }
         }
-
         LivingThing? nearestYet = null;
         double shortestDist = double.MaxValue;
         foreach (LivingThing thing in found)

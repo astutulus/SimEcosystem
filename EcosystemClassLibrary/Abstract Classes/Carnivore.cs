@@ -5,16 +5,19 @@ namespace EcosystemClassLibrary;
 public abstract class Carnivore : Animal
 {
     /* Fields */
-    private HashSet<ESpecies> _preySpecies;
+    private HashSet<ESpecies> _preySpecies = new HashSet<ESpecies>();
 
     /* Properties */
     protected HashSet<ESpecies> PreySpecies { get => _preySpecies; set => _preySpecies = value; }
 
 
     /* Constructors */
-    protected Carnivore(Point position, double typMass, TimeSpan lifespan, HashSet<ESpecies> prey) 
+    protected Carnivore(Point position,
+                        double typMass,
+                        TimeSpan lifespan,
+                        HashSet<ESpecies> prey)
         : base(position, typMass, lifespan)
-    { 
+    {
         PreySpecies = prey;
     }
 

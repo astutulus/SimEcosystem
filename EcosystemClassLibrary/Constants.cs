@@ -4,6 +4,7 @@ internal class Constants
 {
     /*
      * Speed (Hz) of simulator
+     * TODO: Move to Sim class (shouldn't matter to animals)
      */
     internal static int kSimFreqHz = 20;
 

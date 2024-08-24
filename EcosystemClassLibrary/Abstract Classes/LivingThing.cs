@@ -5,23 +5,6 @@ namespace EcosystemClassLibrary;
 
 public abstract class LivingThing : Entity
 {
-
-    /*
-     * Class Fields
-     */
-
-    private static Dictionary<ESpecies, int> _speciesTally = new()
-    {
-        { ESpecies.grass  , 0 },
-        { ESpecies.rabbit , 0 },
-        { ESpecies.fox    , 0 }
-    };
-
-
-
-    /*
-     * Instance Fields
-     */
     private double _mass;
     private double _typMass;
 
@@ -43,11 +26,6 @@ public abstract class LivingThing : Entity
 
     public ESpecies Species { get; set; }
 
-    // Wow, the following automatically selects the Species of this LivingThing
-    public int SpeciesTally { get => _speciesTally[Species]; set => _speciesTally[Species] = value; }
-
-
-
     /* Constructors */
     public LivingThing(Point position, double typMass, TimeSpan lifespan) : base(position)
     {
@@ -61,10 +39,6 @@ public abstract class LivingThing : Entity
         life.Start();
     }
 
-    ~LivingThing()
-    {
-        SpeciesTally--;
-    }
 
 
     /* Methods */
@@ -82,8 +56,11 @@ public abstract class LivingThing : Entity
 
     protected void Birth()
     {
-        World.Instance.CreateEntity(this);
-        IsAlive = true;
+        if (World.Instance != null)
+        {
+            World.Instance.CreateEntity(this);
+            IsAlive = true;
+        }
     }
 
     protected abstract void Behaviour();
@@ -100,12 +77,9 @@ public abstract class LivingThing : Entity
     {
         IsAlive = false;
         Thread.Sleep(Constants.kDecayTime);
-        World.Instance.SmiteEntity(this);
-    }
-
-    public static int GetSpeciesCount(ESpecies species)
-    {
-        return _speciesTally[species];
+        // Null propagation (terse null check)
+        this.PassAway();
+        World.Instance?.SmiteEntity(this);
     }
 
     public override string ToString()
@@ -125,4 +99,5 @@ public abstract class LivingThing : Entity
 
         return info.ToString();
     }
+    public abstract void PassAway();
 }

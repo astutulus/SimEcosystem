@@ -13,7 +13,7 @@ public partial class GUIForm : Form
     private ESpecies _toolSelected = ESpecies.grass;
 
     // So I fixed a hard bug, by moving this out of the only function that uses it.
-    // To do: understand why it can't be in that fnction.
+    // TODO: understand why it can't be in that fnction.
     private Point mousePos;
 
     public GUIForm()
@@ -107,9 +107,9 @@ public partial class GUIForm : Form
     // Text labels by tools
     private void UpdateTextValues()
     {
-        string fox = LivingThing.GetSpeciesCount(ESpecies.fox).ToString();
-        string rab = LivingThing.GetSpeciesCount(ESpecies.rabbit).ToString();
-        string gra = LivingThing.GetSpeciesCount(ESpecies.grass).ToString();
+        string fox = Fox.Count.ToString();
+        string rab = Rabbit.Count.ToString();
+        string gra = Grass.Count.ToString();
 
         SafelySetAnyLabelDescription(foxTxt, fox, Constants.kFoxFillColour);
         SafelySetAnyLabelDescription(rabbitTxt, rab, Constants.kRabbitFillColour);
@@ -203,7 +203,7 @@ public partial class GUIForm : Form
 
     private void PaintDrawToolBox(PaintEventArgs e)
     {
-        PictureBox target = null;
+        PictureBox? target = null;
         switch (_toolSelected)
         {
             case ESpecies.fox:
@@ -216,10 +216,13 @@ public partial class GUIForm : Form
                 target = pictureBox3;
                 break;
         }
-        Rectangle rect = target.ClientRectangle;
-        rect.Offset(target.Location);
-        using var stroke = new Pen(Constants.kToolHighlightColour, Constants.kToolStrokeWidth);
-        e.Graphics.DrawRectangle(stroke, rect);
+        if (target != null)
+        {
+            Rectangle rect = target.ClientRectangle;
+            rect.Offset(target.Location);
+            using var stroke = new Pen(Constants.kToolHighlightColour, Constants.kToolStrokeWidth);
+            e.Graphics.DrawRectangle(stroke, rect);
+        }
     }
 
     private void PaintEntityHighlight(PaintEventArgs e)
